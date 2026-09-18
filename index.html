@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050208">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Suno Prompt Forge AV6 • Google AI</title>
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+:root{
+ --bg:#050208;--panel:#0c0711;--panel2:#120a18;--line:#4e164f;
+ --pink:#ff2bbd;--mag:#ff008c;--hot:#ff5bd1;--text:#f9eff8;--muted:#b99ab7;
+ --good:#63f6c2;--warn:#ffd166;--danger:#ff668f;--radius:20px;
+ --shadow:0 0 28px rgba(255,0,140,.12);
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:
+ radial-gradient(circle at 90% 0%,rgba(255,0,140,.16),transparent 32%),
+ radial-gradient(circle at 10% 25%,rgba(170,0,255,.10),transparent 30%),var(--bg);
+ color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.app{max-width:1180px;margin:auto;padding-bottom:96px}.top{
+ position:sticky;top:0;z-index:20;background:rgba(5,2,8,.88);backdrop-filter:blur(18px);
+ border-bottom:1px solid rgba(255,43,189,.18);padding:10px 14px 8px}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:12px}.logo{font-weight:900;letter-spacing:.08em;
+ font-size:20px;text-shadow:0 0 14px var(--pink)}.logo small{display:block;font-size:9px;letter-spacing:.22em;color:var(--muted)}
+.badge{font-size:10px;border:1px solid var(--pink);color:var(--hot);padding:5px 8px;border-radius:99px;box-shadow:0 0 12px rgba(255,43,189,.18)}
+.hero{padding:28px 16px 16px;position:relative;overflow:hidden}.hero:after{content:"";position:absolute;right:-90px;top:-40px;width:300px;height:190px;
+ background:radial-gradient(circle,rgba(255,0,140,.35),transparent 62%);pointer-events:none}
+h1{font-size:34px;line-height:1;margin:0 0 10px;max-width:650px}.glow{color:var(--hot);text-shadow:0 0 18px rgba(255,43,189,.55)}
+.sub{color:var(--muted);max-width:720px;margin:0;line-height:1.5}
+.modebar{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:18px 0}.modebar button,.nav button{
+ background:linear-gradient(180deg,#120918,#09050c);border:1px solid #5c1a60;color:var(--text);border-radius:15px;padding:12px 8px}
+.modebar button.active{border-color:var(--pink);box-shadow:0 0 22px rgba(255,43,189,.22),inset 0 0 20px rgba(255,43,189,.06)}
+.modebar b{display:block;font-size:12px}.modebar span{display:block;font-size:9px;color:var(--muted);margin-top:3px}
+section{padding:10px 14px;scroll-margin-top:82px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:12px 0}
+.section-head h2{margin:0;font-size:22px}.section-head p{margin:3px 0 0;color:var(--muted);font-size:12px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.card{background:linear-gradient(150deg,rgba(18,10,24,.96),rgba(7,4,10,.96));border:1px solid #431445;border-radius:var(--radius);padding:15px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.card:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,43,189,.035),transparent 35%);pointer-events:none}
+.card h3{margin:0 0 5px;font-size:16px}.card .hint{font-size:11px;color:var(--muted);line-height:1.45}
+label{display:block;font-size:11px;color:#dfc5dc;margin:12px 0 6px}input,select,textarea{
+ width:100%;border-radius:12px;border:1px solid #512050;background:#07040a;color:var(--text);padding:11px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--pink);box-shadow:0 0 0 2px rgba(255,43,189,.08)}
+textarea{min-height:100px;resize:vertical}.chips{display:flex;flex-wrap:wrap;gap:7px}.chip{
+ border:1px solid #5a2258;background:#0b0610;color:#cdb8cb;border-radius:999px;padding:7px 10px;font-size:11px}
+.chip.on{color:#fff;border-color:var(--pink);background:rgba(255,0,140,.13);box-shadow:0 0 10px rgba(255,43,189,.14)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}.btn{border:1px solid #6a2164;background:#110812;color:#fff;padding:10px 13px;border-radius:12px}
+.btn.primary{background:linear-gradient(135deg,#ff008c,#b900ff);border-color:#ff65cf;box-shadow:0 0 20px rgba(255,0,140,.25);font-weight:800}
+.btn.ghost{background:transparent}.btn.danger{border-color:#713047;color:#ff91ae}.btn.good{border-color:#287e68;color:#8dffe1}
+.slider-row{display:grid;grid-template-columns:1fr 55px;gap:10px;align-items:center}.slider-row output{border:1px solid #52204f;border-radius:10px;padding:7px;text-align:center;color:var(--hot)}
+input[type=range]{accent-color:var(--pink);padding:0}
+.lock{float:right;border:1px solid #5b2258;background:#0a050d;color:#d9a9d2;border-radius:9px;padding:4px 7px;font-size:10px}
+.lock.on{color:#fff;border-color:var(--pink);box-shadow:0 0 10px rgba(255,43,189,.2)}
+.output{white-space:pre-wrap;background:#030205;border:1px solid #55164f;border-radius:15px;padding:14px;min-height:150px;font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;color:#ffd8f4}
+.prompt-tabs{display:flex;gap:7px;overflow:auto;padding-bottom:5px}.prompt-tabs button{white-space:nowrap}
+.stat{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted);margin:8px 0}.meter{height:7px;background:#1b0d1b;border-radius:99px;overflow:hidden}.meter i{display:block;height:100%;background:linear-gradient(90deg,#ff008c,#ff5bd1);width:72%}
+.dna{display:flex;flex-wrap:wrap;gap:7px}.dna span{font-size:10px;padding:6px 8px;border-radius:9px;background:#160a18;border:1px solid #4e194b;color:#f3c5e9}.dna span.locked{border-color:var(--pink);color:#fff}
+.section-nav{display:flex;gap:7px;overflow:auto;margin:0 14px 8px}.section-nav a{color:#d9b7d6;text-decoration:none;white-space:nowrap;border:1px solid #42143f;padding:7px 9px;border-radius:99px;font-size:10px}
+.lyric-line{display:grid;grid-template-columns:1fr auto;gap:8px;border-bottom:1px solid #241024;padding:8px 0}.lyric-line small{color:var(--muted);white-space:nowrap}
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.quick button{min-height:70px;text-align:left}
+.project-list{display:grid;gap:8px}.project{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:11px;border:1px solid #431545;border-radius:13px;background:#09050c}
+.project b{font-size:12px}.project small{display:block;color:var(--muted);margin-top:3px}
+.bottom{position:fixed;z-index:30;bottom:0;left:0;right:0;background:rgba(5,2,8,.94);backdrop-filter:blur(16px);border-top:1px solid #4d184a;padding:7px max(8px,env(safe-area-inset-left)) calc(7px + env(safe-area-inset-bottom))}
+.nav{max-width:700px;margin:auto;display:grid;grid-template-columns:repeat(5,1fr);gap:5px}.nav button{border:0;padding:8px 4px;font-size:9px;color:#b995b4}.nav button.active{color:#fff;text-shadow:0 0 10px var(--pink);box-shadow:inset 0 0 20px rgba(255,0,140,.07)}
+.hidden{display:none!important}.toast{position:fixed;z-index:100;left:50%;bottom:92px;transform:translateX(-50%);background:#170b19;border:1px solid var(--pink);padding:10px 14px;border-radius:12px;box-shadow:0 0 25px rgba(255,0,140,.25);font-size:12px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:80;display:flex;align-items:end;justify-content:center;padding:12px}
+.sheet{width:min(720px,100%);max-height:90vh;overflow:auto;background:#0b0610;border:1px solid #63215f;border-radius:22px;padding:17px}
+.kicker{font-size:10px;color:var(--hot);letter-spacing:.14em;text-transform:uppercase}.danger-zone{border-color:#713047}
+@media(min-width:760px){.app{padding-bottom:40px}.top{position:relative}.hero{padding-top:42px}.grid{grid-template-columns:repeat(3,1fr)}section{padding-left:24px;padding-right:24px}.section-nav{margin-left:24px;margin-right:24px}.bottom{position:sticky;bottom:0}.quick{grid-template-columns:repeat(5,1fr)}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+  <div class="brand"><div class="logo">◢ SUNO <span style="color:#fff">PROMPT FORGE</span><small>AV6 • GOOGLE AI BRIDGE</small></div><span class="badge">GEMINI READY</span></div>
+</header>
+
+<div class="hero" id="home">
+  <div class="kicker">CRÉE • EXPLORE • COMPOSE • SANS LIMITES</div>
+  <h1>Une idée. <span class="glow">Des possibilités infinies.</span></h1>
+  <p class="sub">Le studio de prompts pensé pour garder ta liberté : Style et Lyrics restent indépendants, l'IA n'agit que lorsque tu le décides.</p>
+  <div class="modebar" id="modebar">
+    <button data-mode="manual"><b>◈ MANUEL</b><span>Tu gardes le contrôle</span></button>
+    <button data-mode="copilot" class="active"><b>✦ COPILOTE</b><span>L'IA accompagne</span></button>
+    <button data-mode="auto"><b>⚡ AUTOMATIQUE</b><span>Une proposition complète</span></button>
+  </div>
+</div>
+  <div class="actions"><button class="btn" onclick="go('ai')">◈ Connecter Gemini</button><button class="btn" onclick="go('lab')">🧪 Laboratoire</button></div>
+</div>
+
+<nav class="section-nav">
+ <a href="#style">Style Lab</a><a href="#lyrics">Lyrics Lab</a><a href="#ai">AI Copilot</a><a href="#lab">Laboratoire</a><a href="#export">Export</a><a href="#projects">Projets</a>
+</nav>
+
+<section id="style">
+ <div class="section-head"><div><h2>🎛️ Style Lab</h2><p>Construis ton ADN musical. Verrouille ce qui ne doit jamais bouger.</p></div><button class="btn" onclick="randomStyle()">🎲 Mutation</button></div>
+ <div class="grid">
+  <div class="card">
+   <h3>ADN musical</h3>
+   <label>Modèle</label><select id="model"><option>v6</option><option>v6-wild</option><option>v6-mini</option></select>
+   <label>Objectif</label><select id="goal"><option>Contrôle maximal</option><option>Équilibre</option><option>Surprise créative</option><option>Démo rapide</option></select>
+   <label>Genre</label><select id="genre"></select>
+   <label>Sous-genre</label><select id="subgenre"></select>
+   <label>Fusion</label><input id="fusion" placeholder="ex. darkwave + orchestral + trip-hop">
+   <label>Époque / esthétique</label><select id="era"></select>
+   <label>Tempo</label><select id="tempo"></select>
+   <label>Mesure</label><select id="meter"></select>
+   <label>Couleur harmonique</label><select id="harmony"></select>
+  </div>
+  <div class="card">
+   <h3>Énergie & mouvement</h3>
+   <label>Énergie</label><div class="slider-row"><input id="energy" type="range" min="0" max="100" value="70" oninput="out(this)"><output>70</output></div>
+   <label>Groove</label><div class="chips" data-group="groove"></div>
+   <label>Dynamique</label><div class="chips" data-group="dynamics"></div>
+   <label>Direction musicale libre</label><textarea id="styleFree" placeholder="Décris ce que tu veux entendre, même de façon très libre..."></textarea>
+   <label>Instruments</label><div class="chips" data-group="instruments"></div>
+   <label>Techniques vocales</label><div class="chips" data-group="vocalTech"></div>
+   <label>Sound design</label><div class="chips" data-group="sound"></div>
+  </div>
+  <div class="card">
+   <h3>Précision vs liberté</h3>
+   <p class="hint">Les curseurs servent à exprimer ton intention, pas à enfermer ta créativité.</p>
+   <label>Précision</label><div class="slider-row"><input id="precision" type="range" min="0" max="100" value="72" oninput="out(this)"><output>72</output></div>
+   <label>Liberté</label><div class="slider-row"><input id="freedom" type="range" min="0" max="100" value="55" oninput="out(this)"><output>55</output></div>
+   <label>Éléments verrouillés</label><div class="chips" id="locks"></div>
+   <div class="stat"><span>Cohérence estimée</span><b id="styleScore">82%</b></div><div class="meter"><i id="styleMeter"></i></div>
+   <div class="dna" id="dna"></div>
+   <div class="actions"><button class="btn primary" onclick="buildStyle()">⚡ Compiler le Style Prompt</button><button class="btn" onclick="copyText('styleOut')">Copier</button></div>
+   <div class="output" id="styleOut">Ton Style Prompt apparaîtra ici.</div>
+  </div>
+ </div>
+</section>
+
+<section id="lyrics">
+ <div class="section-head"><div><h2>✍️ Lyrics Lab</h2><p>Écris, structure, adapte et fais varier tes paroles sans perdre ton intention.</p></div><button class="btn" onclick="generateHooks()">🔥 Hooks</button></div>
+ <div class="grid">
+  <div class="card">
+   <h3>Direction d'écriture</h3>
+   <label>Langue</label><select id="language"></select>
+   <label>Format</label><select id="lyricType"><option>Chanson complète</option><option>Couplets + refrain</option><option>Refrain / hook</option><option>Rap</option><option>Spoken word</option><option>Poème chantable</option><option>Dialogue</option></select>
+   <label>Point de vue</label><select id="pov"><option>Je / intime</option><option>Tu / adresse directe</option><option>Il / elle / récit</option><option>Nous / collectif</option><option>Dialogue</option><option>Universel</option></select>
+   <label>Style d'écriture</label><select id="writing"><option>Naturelle</option><option>Poétique</option><option>Cinématographique</option><option>Brute / réaliste</option><option>Métaphorique</option><option>Minimaliste</option><option>Très imagée</option><option>Expérimentale</option></select>
+   <label>Rimes</label><select id="rhyme"><option>Libres</option><option>Naturelles</option><option>Croisées ABAB</option><option>Embrassées ABBA</option><option>Internes</option><option>Multisyllabiques</option></select>
+   <label>Densité</label><select id="density"><option>Aérée</option><option>Équilibrée</option><option>Dense</option><option>Très dense</option></select>
+  </div>
+  <div class="card">
+   <h3>Histoire & émotion</h3>
+   <label>Thème / message</label><textarea id="story" placeholder="De quoi parle la chanson ? Que veux-tu faire ressentir ?"></textarea>
+   <label>Émotions</label><div class="chips" data-group="emotions"></div>
+   <label>Éléments obligatoires</label><textarea id="required" placeholder="Mots, personnages, lieux, images, phrases à conserver..."></textarea>
+   <label>À éviter</label><textarea id="avoid" placeholder="Clichés, mots, thèmes, tournures..."></textarea>
+   <label>Direction auteur libre</label><textarea id="lyricFree" placeholder="Consignes personnelles, références d'écriture, contraintes..."></textarea>
+  </div>
+  <div class="card">
+   <h3>Architecture</h3>
+   <label>Hook</label><select id="hook"><option>Phrase forte</option><option>Mot répété</option><option>Question</option><option>Métaphore</option><option>Hook phonétique</option><option>Libre</option></select>
+   <label>Sections</label><div class="chips" data-group="sections"></div>
+   <div class="actions"><button class="btn primary" onclick="buildLyrics()">✍️ Compiler le Lyrics Prompt</button><button class="btn" onclick="copyText('lyricsOut')">Copier</button></div>
+   <div class="output" id="lyricsOut">Ton Lyrics Prompt apparaîtra ici.</div>
+   <div id="hookBox" class="hidden" style="margin-top:10px"></div>
+  </div>
+ </div>
+</section>
+
+<section id="ai">
+ <div class="section-head"><div><h2>🤖 AI Copilot</h2><p>L'IA propose. Toi, tu acceptes, modifies ou ignores.</p></div><span class="badge">OPTIONNEL</span></div>
+ <div class="grid">
+  <div class="card">
+   <h3>Mission</h3>
+   <label>Que veux-tu que le copilote fasse ?</label>
+   <textarea id="aiRequest" placeholder="ex. Transforme mon idée en univers dark cinematic, sans changer ma voix ni mon BPM."></textarea>
+   <label>Action</label><select id="aiAction"><option>Brainstorm — 5 directions</option><option>Construire l'ADN musical</option><option>Construire l'architecture des paroles</option><option>Proposer 3 hooks</option><option>Réécrire sans perdre le sens</option><option>Créer 4 univers très différents</option><option>Contrôler la cohérence</option></select>
+   <label>Niveau d'intervention</label><select id="aiLevel"><option>Suggestions uniquement</option><option>Propositions détaillées</option><option>Construire une version complète</option></select>
+   <div class="actions"><button class="btn primary" onclick="runCopilot()">✦ Lancer le Copilote</button><button class="btn" onclick="clearAI()">Effacer</button></div>
+   <p class="hint" style="margin-top:10px">AV6 fonctionne sans clé externe. Le moteur local génère des cadres créatifs et des mutations. Une connexion IA réelle peut être ajoutée séparément.</p>
+  </div>
+  <div class="card">
+   <h3>Propositions</h3><div id="aiOut" class="output">Aucune proposition. Lance le Copilote.</div>
+   <div class="actions hidden" id="aiApply"><button class="btn good" onclick="applyAI('style')">Appliquer → Style</button><button class="btn good" onclick="applyAI('lyrics')">Appliquer → Lyrics</button><button class="btn good" onclick="applyAI('both')">Fusionner → les deux</button></div>
+  </div>
+  <div class="card" style="grid-column:1/-1">
+   <h3>◈ Google Gemini Bridge <span class="badge">OPTIONNEL</span></h3>
+   <p class="hint">Connecte AV6 à Gemini pour de vraies générations. Le mode local reste disponible à tout moment.</p>
+   <div class="grid" style="margin-top:8px">
+    <div>
+     <label>Modèle Gemini</label>
+     <select id="geminiModel"><option value="gemini-3.5-flash">Gemini Flash — rapide</option><option value="gemini-3.5-pro">Gemini Pro — approfondi</option></select>
+     <label>Clé API Google AI Studio</label>
+     <input id="geminiKey" type="password" placeholder="Colle ta clé Gemini ici">
+     <label>Endpoint personnalisé (facultatif)</label>
+     <input id="geminiEndpoint" placeholder="Laisser vide pour l’API Gemini officielle">
+    </div>
+    <div>
+     <label>Instruction Gemini</label>
+     <textarea id="geminiRequest" placeholder="Ex. Analyse mon Style Prompt, conserve les éléments verrouillés et propose 3 mutations originales."></textarea>
+     <div class="actions"><button class="btn primary" onclick="callGemini()">◈ Envoyer à Gemini</button><button class="btn" onclick="testGemini()">Tester</button><button class="btn" onclick="forgetGemini()">Effacer la clé</button></div>
+     <div id="geminiStatus" class="hint" style="margin-top:10px">État : mode local.</div>
+    </div>
+   </div>
+   <div id="geminiOut" class="output" style="margin-top:12px">La réponse Gemini apparaîtra ici.</div>
+  </div>
+
+ </div>
+</section>
+
+<section id="lab">
+ <div class="section-head"><div><h2>🧪 Laboratoire</h2><p>Mutations contrôlées, divergence et comparaison A/B.</p></div></div>
+ <div class="grid">
+  <div class="card">
+   <h3>Divergence</h3><div class="slider-row"><input id="divergence" type="range" min="0" max="100" value="55" oninput="out(this)"><output>55</output></div>
+   <label>Ce qui peut muter</label><div class="chips" data-group="mutables"></div>
+   <div class="actions"><button class="btn primary" onclick="makeLab()">🧪 Générer 4 directions</button></div>
+  </div>
+  <div class="card">
+   <h3>Résultats</h3><div id="labOut"></div>
+  </div>
+  <div class="card">
+   <h3>Prompt Doctor</h3><p class="hint">Colle un prompt existant pour repérer surcharge, contradictions et éléments manquants.</p>
+   <textarea id="doctorIn" placeholder="Colle ici ton prompt Suno..."></textarea>
+   <div class="actions"><button class="btn primary" onclick="doctor()">🩺 Diagnostiquer</button></div>
+   <div id="doctorOut" class="output" style="margin-top:10px">Diagnostic en attente.</div>
+  </div>
+ </div>
+</section>
+
+<section id="export">
+ <div class="section-head"><div><h2>🚀 Suno Export</h2><p>Trois sorties propres : Style, Lyrics et Combined.</p></div><button class="btn primary" onclick="compileAll()">⚡ Compiler tout</button></div>
+ <div class="prompt-tabs">
+  <button class="btn" onclick="showOut('styleOut')">STYLE</button><button class="btn" onclick="showOut('lyricsOut')">LYRICS</button><button class="btn" onclick="showOut('combinedOut')">COMBINED</button>
+ </div>
+ <div class="card"><div class="output" id="combinedOut">Ton Combined Prompt apparaîtra ici.</div><div class="actions"><button class="btn primary" onclick="copyText('combinedOut')">Copier Combined</button><button class="btn" onclick="saveProject()">💾 Sauvegarder</button><button class="btn" onclick="exportJSON()">⇩ Export JSON</button><label class="btn" style="margin:0;display:inline-block">⇧ Import JSON<input type="file" accept=".json" onchange="importJSON(event)" style="display:none"></label></div></div>
+</section>
+
+<section id="projects">
+ <div class="section-head"><div><h2>📁 Mes projets</h2><p>Versions, forks et sauvegardes restent sur ton appareil.</p></div><button class="btn" onclick="newProject()">＋ Nouveau</button></div>
+ <div class="card"><input id="projectName" placeholder="Nom du projet" value="Eternal Horizon"><div class="project-list" id="projectList" style="margin-top:10px"></div></div>
+</section>
+
+</div>
+
+<div class="bottom"><nav class="nav">
+<button class="active" onclick="go('home',this)">⌂<br>Accueil</button><button onclick="go('style',this)">✦<br>Créer</button><button onclick="go('projects',this)">□<br>Projets</button><button onclick="go('lab',this)">⚗<br>Laboratoire</button><button onclick="openSettings()">⚙<br>Réglages</button>
+</nav></div>
+<div id="toast" class="toast hidden"></div>
+<div id="modal" class="modal hidden"><div class="sheet"><div class="section-head"><div><div class="kicker">Réglages AV6</div><h2>Connexion IA optionnelle</h2></div><button class="btn" onclick="closeSettings()">✕</button></div>
+ <p class="hint">Le mode Manuel reste totalement autonome. Si tu ajoutes une API réelle, ne mets jamais une clé secrète dans une version publique du site : utilise de préférence un proxy/backend sécurisé.</p>
+ <label>Fournisseur IA</label><select id="provider"><option>Local / aucun</option><option>Google Gemini</option><option>Endpoint compatible API</option></select>
+ <label>Endpoint (optionnel)</label><input id="endpoint" placeholder="https://...">
+ <label>Clé API (stockée localement)</label><input id="apiKey" type="password" placeholder="Non requise en mode local">
+ <p class="hint">Pour une version publique, préfère un backend/proxy sécurisé afin de garder les secrets côté serveur.</p>
+ <div class="actions"><button class="btn primary" onclick="saveSettings()">Enregistrer</button><button class="btn danger" onclick="resetApp()">Réinitialiser les données</button></div>
+</div></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const lists={
+ genre:["Pop","Rock","Alternative","Indie","Metal","Hard Rock","Punk","Electronic","Synthwave","Darkwave","House","Techno","Drum & Bass","Hip-Hop","Trap","R&B","Soul","Funk","Jazz","Blues","Reggae","Reggaeton","Latin","Afrobeat","Classical","Cinematic","Ambient","Folk","World","Experimental"],
+ subgenre:["Dark Synthwave","Dream Pop","Post-Rock","Industrial","Nu Metal","Progressive Metal","Post-Punk","Future Bass","Melodic Techno","Deep House","Trip-Hop","Boom Bap","Alternative R&B","Neo Soul","Cinematic Pop","Orchestral Hybrid","Dark Ambient","Electroclash","Phonk","Hyperpop"],
+ era:["60s","70s","80s","90s","2000s","2010s","2020s","Futuriste","Rétro-futuriste","Intemporel"],
+ tempo:["Très lent • 50–70 BPM","Lent • 70–90 BPM","Mid • 90–110 BPM","Rapide • 110–130 BPM","Très rapide • 130–160 BPM","Extrême • 160+ BPM"],
+ meter:["4/4","3/4","6/8","5/4","7/8","12/8","Libre / variable"],
+ harmony:["Mineur sombre","Majeur lumineux","Modal","Dorian","Phrygian","Mixolydian","Chromatique","Jazz / enrichi","Ambigu / tension","Minimal"],
+ groove:["Straight","Swung","Syncopé","Lourd","Hypnotique","Dansant","Brisé","Half-time","Double-time","Libre"],
+ dynamics:["Progressive","Punchy","Crescendo","Stop & go","Contrastée","Intime → énorme","Constante","Imprévisible"],
+ instruments:["Synthés analogiques","Piano","Guitare électrique","Guitare acoustique","Basse synthé","Basse électrique","Batterie acoustique","Drums électroniques","Cordes","Cuivres","Chœurs","Textures vocales","808","Percussions","Glitch"],
+ vocalTech:["Falsetto","Belting","Whisper","Growl","Distorsion","Vocal fry","Harmonies","Doubles","Call & response","Spoken","Rap mélodique"],
+ sound:["Tape saturation","Vinyl texture","Glitch","Granular","Reverse","Bitcrush","Lo-fi","Analog warmth","Cybernetic FX","Cinematic impacts","Noise layers"],
+ emotions:["Nostalgie","Amour","Désir","Joie","Colère","Espoir","Mélancolie","Liberté","Solitude","Triomphe","Ambivalence","Mystère"],
+ sections:["[Intro]","[Verse 1]","[Pre-Chorus]","[Chorus]","[Verse 2]","[Chorus 2]","[Bridge]","[Breakdown]","[Final Chorus]","[Outro]"],
+ mutables:["Genre","Tempo","Harmonie","Groove","Instruments","Voix","Structure","Production","Sound design"]
+};
+const state={mode:"copilot",locks:new Set(),lastAI:"",saved:[]};
+function fill(id,arr){$(id).innerHTML=arr.map((x,i)=>`<option>${x}</option>`).join("")}
+["genre","subgenre","era","tempo","meter","harmony"].forEach(id=>fill(id,lists[id]));
+fill("language",["Français","Anglais","Espagnol","Italien","Portugais","Brésilien","Allemand","Néerlandais","Suédois","Norvégien","Danois","Finnois","Polonais","Tchèque","Hongrois","Roumain","Grec","Turc","Arabe","Hébreu","Hindi","Ourdou","Bengali","Punjabi","Tamoul","Indonésien","Malais","Vietnamien","Thaï","Chinois mandarin","Japonais","Coréen","Swahili","Afrikaans","Latin","Esperanto"]);
+const chipGroups={groove:"groove",dynamics:"dynamics",instruments:"instruments",vocalTech:"vocalTech",sound:"sound",emotions:"emotions",sections:"sections",mutables:"mutables"};
+for(const [target,key] of Object.entries(chipGroups)){const box=document.querySelector(`[data-group="${target}"]`); box.innerHTML=lists[key].map(x=>`<button class="chip" data-value="${esc(x)}">${x}</button>`).join("");}
+document.addEventListener("click",e=>{if(e.target.classList.contains("chip")){e.target.classList.toggle("on");updateDNA();}});
+document.querySelectorAll(".modebar button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".modebar button").forEach(x=>x.classList.remove("active"));b.classList.add("active");state.mode=b.dataset.mode;toast("Mode "+b.querySelector("b").innerText+" activé");});
+function esc(s){return s.replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;").replaceAll(">","&gt;")}
+function selected(group){return [...document.querySelectorAll(`[data-group="${group}"] .on`)].map(x=>x.dataset.value)}
+function out(el){el.nextElementSibling.value=el.value;updateDNA()}
+function lockToggle(name){state.locks.has(name)?state.locks.delete(name):state.locks.add(name);updateDNA()}
+function updateDNA(){
+ const vals=[[$("genre").value,"Genre"],[$("tempo").value,"Tempo"],[$("harmony").value,"Harmonie"],[selected("groove")[0]||"Groove","Groove"],[selected("instruments")[0]||"Instruments","Instrument"],[$("language").value,"Langue"]];
+ $("dna").innerHTML=vals.map(([v,k])=>`<span class="${state.locks.has(k)?"locked":""}" onclick="lockToggle('${k}')">${state.locks.has(k)?"🔒 ":""}${v}</span>`).join("");
+ $("locks").innerHTML=[...state.locks].map(x=>`<button class="chip on" onclick="lockToggle('${x}')">🔒 ${x}</button>`).join("")||'<span class="hint">Clique un élément de l’ADN pour le verrouiller.</span>';
+ let score=Math.round(68+Number($("precision").value)*.16-(selected("emotions").length>5?5:0));
+ $("styleScore").innerText=Math.max(40,Math.min(98,score))+"%";$("styleMeter").style.width=Math.max(40,Math.min(98,score))+"%";
+}
+function buildStyle(){
+ const s=`[STYLE PROMPT — SUNO ${$("model").value}]
+OBJECTIF: ${$("goal").value}
+GENRE: ${$("genre").value}
+SOUS-GENRE: ${$("subgenre").value}
+FUSION: ${$("fusion").value||"aucune"}
+ÉPOQUE / ESTHÉTIQUE: ${$("era").value}
+TEMPO: ${$("tempo").value}
+MESURE: ${$("meter").value}
+HARMONIE: ${$("harmony").value}
+ÉNERGIE: ${$("energy").value}/100
+GROOVE: ${selected("groove").join(", ")||"à interpréter librement"}
+DYNAMIQUE: ${selected("dynamics").join(", ")||"progression organique"}
+INSTRUMENTS: ${selected("instruments").join(", ")||"choix cohérent avec le genre"}
+TECHNIQUES VOCALES: ${selected("vocalTech").join(", ")||"adaptées au morceau"}
+SOUND DESIGN: ${selected("sound").join(", ")||"subtil et cohérent"}
+PRÉCISION: ${$("precision").value}/100
+LIBERTÉ: ${$("freedom").value}/100
+DIRECTION AUTEUR: ${$("styleFree").value||"laisser de l’espace à l’interprétation"}
+CONTRAINTES VERROUILLÉES: ${[...state.locks].join(", ")||"aucune"}
+
+COMPILE WITH PRIORITY ON: intention, cohérence, dynamique, interprétation vocale, arrangement et production. Éviter les répétitions inutiles. Conserver les éléments verrouillés et utiliser les éléments libres comme espace d’exploration.`;
+$("styleOut").innerText=s;toast("Style Prompt compilé");updateDNA();
+}
+function buildLyrics(){
+ const s=`[LYRICS PROMPT]
+LANGUE: ${$("language").value}
+FORMAT: ${$("lyricType").value}
+POINT DE VUE: ${$("pov").value}
+STYLE D’ÉCRITURE: ${$("writing").value}
+RIMES: ${$("rhyme").value}
+DENSITÉ: ${$("density").value}
+HOOK: ${$("hook").value}
+ÉMOTIONS: ${selected("emotions").join(", ")||"à choisir selon le message"}
+STRUCTURE: ${selected("sections").join(" → ")||"[Intro] → [Verse 1] → [Chorus] → [Verse 2] → [Bridge] → [Final Chorus] → [Outro]"}
+
+THÈME / MESSAGE:
+${$("story").value||"À définir"}
+
+ÉLÉMENTS OBLIGATOIRES:
+${$("required").value||"Aucun"}
+
+À ÉVITER:
+${$("avoid").value||"Clichés et formulations génériques"}
+
+DIRECTION AUTEUR:
+${$("lyricFree").value||"Écriture naturelle et chantable"}
+
+OBJECTIF: produire des paroles originales, cohérentes, mémorables et chantables. Respecter la structure, le point de vue, la langue et les contraintes. Donner au refrain une identité forte sans sacrifier le sens.`;
+$("lyricsOut").innerText=s;toast("Lyrics Prompt compilé");
+}
+function compileAll(){
+ buildStyle();buildLyrics();
+ $("combinedOut").innerText=$("styleOut").innerText+"\n\n════════════════════════════════\n\n"+$("lyricsOut").innerText;
+ go("export");
+}
+function copyText(id){const t=$(id).innerText;if(!t||t.includes("apparaîtra ici"))return toast("Rien à copier");navigator.clipboard?.writeText(t).then(()=>toast("Copié dans le presse-papiers"))}
+function randomStyle(){
+ const choose=id=>{const a=lists[id];$(id).value=a[Math.floor(Math.random()*a.length)]};
+ ["genre","subgenre","era","tempo","meter","harmony"].forEach(id=>{if(!state.locks.has(id))choose(id)});
+ const candidates=lists.instruments;document.querySelectorAll('[data-group="instruments"] .on').forEach(x=>x.classList.remove("on"));
+ candidates.sort(()=>Math.random()-.5).slice(0,3).forEach(v=>document.querySelector(`[data-group="instruments"] [data-value="${CSS.escape(v)}"]`)?.classList.add("on"));
+ $("energy").value=state.locks.has("Energy")?$("energy").value:Math.floor(35+Math.random()*60);$("energy").nextElementSibling.value=$("energy").value;updateDNA();buildStyle();toast("ADN muté sans toucher aux éléments verrouillés");
+}
+function generateHooks(){
+ const theme=$("story").value||"ton thème";
+ const lang=$("language").value;
+ const hooks=[`« ${theme} — une phrase simple qui revient et s’intensifie »`,`« Même quand tout disparaît, ${theme} reste »`,`« Et si ${theme} était la dernière chose vraie ? »`,`« ${theme} / ${theme} / ${theme} »`,`« Un hook phonétique court, mémorisable et très chantable autour de ${theme} »`];
+ $("hookBox").classList.remove("hidden");$("hookBox").innerHTML=`<div class="kicker">HOOK LAB • ${lang}</div><div class="output">${hooks.join("\n\n")}</div><div class="actions"><button class="btn primary" onclick="chooseHook()">Utiliser une direction</button></div>`;toast("5 directions de hook générées");
+}
+function chooseHook(){ $("lyricFree").value+="\nHOOK À EXPLORER : phrase courte, mémorisable, répétable, directement liée au thème."; buildLyrics(); }
+
+function geminiPrompt(){
+ const style=$("styleOut").innerText.includes("apparaîtra")?"":$("styleOut").innerText;
+ const lyrics=$("lyricsOut").innerText.includes("apparaîtra")?"":$("lyricsOut").innerText;
+ const combined=$("combinedOut").innerText.includes("apparaîtra")?"":$("combinedOut").innerText;
+ const request=$("geminiRequest").value||"Analyse mon projet et propose des améliorations sans écraser mes choix.";
+ return `Tu es le copilote créatif de Suno Prompt Forge AV6. Tu aides à préparer des prompts pour Suno. RÈGLE ABSOLUE : ne remplace jamais un choix verrouillé et distingue STYLE et LYRICS.
+DEMANDE UTILISATEUR:
+${request}
+
+STYLE ACTUEL:
+${style}
+
+LYRICS ACTUELS:
+${lyrics}
+
+COMBINED:
+${combined}
+
+Réponds en français. Structure tes propositions. Si tu modifies quelque chose, explique brièvement pourquoi puis donne une version directement exploitable.`;
+}
+function geminiConfig(){
+ const key=$("geminiKey").value.trim()||localStorage.getItem("spf6geminikey")||"";
+ const model=$("geminiModel").value;
+ const custom=$("geminiEndpoint").value.trim();
+ const endpoint=custom||`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+ return {key,model,endpoint};
+}
+async function callGemini(){
+ const c=geminiConfig();
+ if(!c.key){$("geminiStatus").innerText="État : clé Gemini manquante.";toast("Ajoute une clé Gemini");return}
+ localStorage.setItem("spf6geminikey",c.key);
+ $("geminiStatus").innerText="État : connexion à Gemini…";$("geminiOut").innerText="Génération en cours…";
+ try{
+  const res=await fetch(c.endpoint,{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":c.key},body:JSON.stringify({contents:[{parts:[{text:geminiPrompt()}]}]})});
+  const data=await res.json();if(!res.ok)throw new Error(data?.error?.message||("HTTP "+res.status));
+  const text=data?.candidates?.[0]?.content?.parts?.map(p=>p.text||"").join("")||"Réponse Gemini vide.";
+  $("geminiOut").innerText=text;$("aiOut").innerText=text;$("aiApply").classList.remove("hidden");state.lastAI=text;
+  $("geminiStatus").innerText="État : connecté à Gemini.";toast("Réponse Gemini reçue");
+ }catch(err){$("geminiOut").innerText="Erreur Gemini : "+err.message;$("geminiStatus").innerText="État : erreur de connexion.";toast("Connexion Gemini impossible")}
+}
+async function testGemini(){const old=$("geminiRequest").value;$("geminiRequest").value="Réponds uniquement : GEMINI OK";await callGemini();$("geminiRequest").value=old}
+function forgetGemini(){localStorage.removeItem("spf6geminikey");$("geminiKey").value="";$("geminiStatus").innerText="État : clé locale effacée.";toast("Clé Gemini effacée")}
+function runCopilot(){
+ const req=$("aiRequest").value||"Explore mon projet actuel et propose des directions créatives.";
+ const action=$("aiAction").value, level=$("aiLevel").value;
+ const base=`MISSION: ${action}\nNIVEAU: ${level}\nDEMANDE: ${req}\n\n`;
+ const proposals=[
+ "A • FIDÈLE — renforcer l’intention actuelle, conserver les paramètres verrouillés et clarifier les choix déjà présents.",
+ "B • MUTATION — pousser fortement un paramètre libre (groove, sound design ou structure) pour créer une identité différente.",
+ "C • HYBRIDE — fusionner deux influences éloignées tout en gardant la même émotion centrale.",
+ "D • LABORATOIRE — retirer volontairement quelques conventions et laisser davantage d’espace à l’interprétation."
+ ];
+ state.lastAI=base+proposals.join("\n\n");
+ $("aiOut").innerText=state.lastAI;$("aiApply").classList.remove("hidden");toast("Copilote : 4 propositions prêtes");
+}
+function applyAI(target){
+ const txt=state.lastAI.split("\n\n").slice(2).join("\n\n");
+ if(target==="style"||target==="both") $("styleFree").value+=`\n\n[NOTE COPILOTE]\n${txt}`;
+ if(target==="lyrics"||target==="both") $("lyricFree").value+=`\n\n[NOTE COPILOTE]\n${txt}`;
+ if(target!=="lyrics")buildStyle();if(target!=="style")buildLyrics();toast("Proposition fusionnée sans écraser ton travail");
+}
+function clearAI(){$("aiOut").innerText="Aucune proposition. Lance le Copilote.";$("aiApply").classList.add("hidden");state.lastAI=""}
+function makeLab(){
+ const d=+$("divergence").value;
+ const names=["A • Fidèle","B • Mutation","C • Hybride","D • Expérimental"];
+ const descriptions=[
+ "Préserve ton ADN et améliore la cohérence.",
+ `Divergence ${d}% : modifie principalement les éléments libres.`,
+ `Divergence ${Math.min(100,d+15)}% : croise deux univers contrastés.`,
+ `Divergence ${Math.min(100,d+30)}% : cherche une structure et une production inattendues.`
+ ];
+ $("labOut").innerHTML=names.map((n,i)=>`<div class="project"><div><b>${n}</b><small>${descriptions[i]}</small></div><button class="btn" onclick="useLab(${i})">Utiliser</button></div>`).join("");
+}
+function useLab(i){$("styleFree").value+=`\nLAB ${["A","B","C","D"][i]} : explorer cette direction sans écraser le brief existant.`;buildStyle();go("style");}
+function doctor(){
+ const t=$("doctorIn").value.trim();
+ if(!t)return toast("Colle un prompt à diagnostiquer");
+ const words=t.split(/\s+/).length;
+ const issues=[];if(words>220)issues.push("Surcharge possible : le prompt est très long.");if(/but|however|avoid|sans|mais/i.test(t))issues.push("Contradictions potentielles : vérifier les consignes opposées.");if(!/bpm|tempo/i.test(t))issues.push("Tempo absent ou implicite.");if(!/voice|voc|voix/i.test(t))issues.push("Direction vocale peu explicite.");if(!/structure|verse|chorus|couplet|refrain/i.test(t))issues.push("Structure peu explicite.");if(!/instrument|guitar|piano|synth|drum|batterie|guitare/i.test(t))issues.push("Instrumentation peu décrite.");
+ $("doctorOut").innerText=`DIAGNOSTIC\n\nLongueur estimée : ${words} mots\n\nPOINTS À VÉRIFIER\n${issues.length?issues.map(x=>"• "+x).join("\n"):"• Aucun signal évident dans les contrôles locaux."}\n\nCONSEIL\nConserver l’intention principale, supprimer les répétitions et distinguer clairement style, voix, arrangement, dynamique et production.`;
+}
+function collect(){
+ const o={};document.querySelectorAll("input,select,textarea").forEach(e=>{if(e.id)o[e.id]=e.type==="range"?e.value:e.value});
+ o.chips={};Object.keys(chipGroups).forEach(g=>o.chips[g]=selected(g));o.locks=[...state.locks];o.mode=state.mode;return o;
+}
+function restore(o){if(!o)return;Object.entries(o).forEach(([k,v])=>{if(k==="chips"||k==="locks"||k==="mode")return;const e=$(k);if(e){e.value=v;if(e.type==="range")e.nextElementSibling.value=v}});Object.entries(o.chips||{}).forEach(([g,vals])=>vals.forEach(v=>document.querySelector(`[data-group="${g}"] [data-value="${CSS.escape(v)}"]`)?.classList.add("on")));state.locks=new Set(o.locks||[]);updateDNA()}
+function saveProject(){const name=$("projectName").value||"Sans nom";const data={name,updated:new Date().toLocaleString("fr-FR"),state:collect()};const arr=JSON.parse(localStorage.getItem("spf6projects")||"[]");const idx=arr.findIndex(x=>x.name===name);if(idx>=0)arr[idx]=data;else arr.unshift(data);localStorage.setItem("spf6projects",JSON.stringify(arr.slice(0,30)));renderProjects();toast("Projet sauvegardé localement")}
+function renderProjects(){const arr=JSON.parse(localStorage.getItem("spf6projects")||"[]");$("projectList").innerHTML=arr.length?arr.map((p,i)=>`<div class="project"><div><b>${esc(p.name)}</b><small>${esc(p.updated)}</small></div><div class="actions" style="margin:0"><button class="btn" onclick="loadProject(${i})">Ouvrir</button><button class="btn" onclick="forkProject(${i})">Fork</button></div></div>`).join(""):'<p class="hint">Aucun projet sauvegardé.</p>'}
+function loadProject(i){const p=JSON.parse(localStorage.getItem("spf6projects")||"[]")[i];if(!p)return;restore(p.state);$("projectName").value=p.name;toast("Projet chargé");go("home")}
+function forkProject(i){const arr=JSON.parse(localStorage.getItem("spf6projects")||"[]");const p=arr[i];if(!p)return;const copy=JSON.parse(JSON.stringify(p));copy.name=p.name+" • Fork";copy.updated=new Date().toLocaleString("fr-FR");arr.unshift(copy);localStorage.setItem("spf6projects",JSON.stringify(arr.slice(0,30)));renderProjects();toast("Fork créé")}
+function newProject(){if(confirm("Créer un nouveau projet vide ?")){location.reload()}}
+function exportJSON(){const blob=new Blob([JSON.stringify({project:$("projectName").value,state:collect(),style:$("styleOut").innerText,lyrics:$("lyricsOut").innerText,combined:$("combinedOut").innerText},null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=($("projectName").value||"suno-project")+".json";a.click();URL.revokeObjectURL(a.href);toast("Export JSON créé")}
+function importJSON(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);restore(o.state);if(o.project)$("projectName").value=o.project;if(o.style)$("styleOut").innerText=o.style;if(o.lyrics)$("lyricsOut").innerText=o.lyrics;if(o.combined)$("combinedOut").innerText=o.combined;toast("Projet importé")}catch{toast("Fichier JSON invalide")}};r.readAsText(f)}
+function openSettings(){ $("modal").classList.remove("hidden");$("provider").value=localStorage.getItem("spf6provider")||"Local / aucun";$("endpoint").value=localStorage.getItem("spf6endpoint")||"";$("apiKey").value=localStorage.getItem("spf6key")||"";$("geminiKey").value=localStorage.getItem("spf6geminikey")||""}
+function closeSettings(){$("modal").classList.add("hidden")}
+function saveSettings(){localStorage.setItem("spf6provider",$("provider").value);localStorage.setItem("spf6endpoint",$("endpoint").value);localStorage.setItem("spf6key",$("apiKey").value);if($("geminiKey"))localStorage.setItem("spf6geminikey",$("geminiKey").value);closeSettings();toast("Réglages enregistrés")}
+function resetApp(){if(confirm("Effacer projets et réglages locaux ?")){localStorage.clear();location.reload()}}
+function go(id,btn){document.getElementById(id)?.scrollIntoView({behavior:"smooth"});if(btn){document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));btn.classList.add("active")}}
+function showOut(id){document.querySelectorAll(".output").forEach(x=>x.style.outline="none");$(id).scrollIntoView({behavior:"smooth",block:"center"});$(id).style.outline="1px solid var(--pink)";setTimeout(()=>$(id).style.outline="none",900)}
+function toast(t){$("toast").innerText=t;$("toast").classList.remove("hidden");clearTimeout(window._toast);window._toast=setTimeout(()=>$("toast").classList.add("hidden"),1800)}
+updateDNA();renderProjects();
+if("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js").catch(()=>{});
+</script>
+</body>
+</html>

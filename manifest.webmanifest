@@ -1,0 +1,9 @@
+{
+  "name":"Suno Prompt Forge AV6 • Google AI",
+  "short_name":"Suno Forge AV6",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#050208",
+  "theme_color":"#050208",
+  "lang":"fr"
+}
